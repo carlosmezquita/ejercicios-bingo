@@ -6,3 +6,9 @@
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
+/jarRepositories.xml
+/encodings.xml
+/misc.xml
+/compiler.xml
+/vcs.xml
+/discord.xml
