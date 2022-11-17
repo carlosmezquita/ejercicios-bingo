@@ -11,7 +11,7 @@ public class Bingo implements Runnable {
     private ArrayList<Integer> totalNumbers;
     private ArrayList<Integer> gottenNumbers ;
 
-    private final int price = 2;
+    private final int price;
     private boolean bingo = false;
     private boolean line = false;
     private int actualBall;
@@ -23,7 +23,8 @@ public class Bingo implements Runnable {
         for (int i = 1; i < 100; i++) {
             totalNumbers.add(i);
         }
-        this.gottenNumbers = new ArrayList<Integer>();
+        this.gottenNumbers = new ArrayList<>();
+        this.price = 2;
     }
 
     public boolean isBingo() {
@@ -79,7 +80,7 @@ public class Bingo implements Runnable {
 
                     //Bloque sincronizado para que aunque varios canten solo gane el más rápido
                     synchronized (this){
-                        System.out.printf("[%s]: ¡LÍNEA!\n");
+                        System.out.printf("[%s]: ¡LÍNEA!\n", name);
                          if (!line) {
                              line = true;
                              System.out.printf("%s se ha llevado la línea\n", name);
@@ -97,7 +98,7 @@ public class Bingo implements Runnable {
     //Divide los cartones en líneas para comprobar si tiene línea
     private boolean checkLine(int[][] card) {
         //Cuenta las coincidencias
-        int coincidences = 0;
+        int coincidences;
 
         //Itera por cada línea
         for (int[] row : card) {
