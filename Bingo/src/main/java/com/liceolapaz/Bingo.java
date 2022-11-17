@@ -77,15 +77,8 @@ public class Bingo implements Runnable {
                 //Si alguien canta línea se ejecuta
                 if (checkLine(card)){
 
-
                     //Bloque sincronizado para que aunque varios canten solo gane el más rápido
-                    synchronized (this){
-                        System.out.printf("[%s]: ¡LÍNEA!\n", name);
-                         if (!line) {
-                             line = true;
-                             System.out.printf("%s se ha llevado la línea\n", name);
-                         }
-                    }
+                    makedLine(name);
                 }
             }
             if (checkBingo(card)) {
@@ -94,6 +87,8 @@ public class Bingo implements Runnable {
         }
         return false;
     }
+
+
 
     //Divide los cartones en líneas para comprobar si tiene línea
     private boolean checkLine(int[][] card) {
@@ -138,7 +133,16 @@ public class Bingo implements Runnable {
         return false;
     }
 
-    //Declara el ganador
+    //Declara el ganador de la líena
+    private synchronized void makedLine(String name) {
+        System.out.printf("[%s]: ¡LÍNEA!\n", name);
+        if (!line) {
+            line = true;
+            System.out.printf("%s se ha llevado la línea\n", name);
+        }
+    }
+
+    //Declara el ganador del bingo
     public void toBingo(String name){
         System.out.printf("[%s]: ¡BINGO!\n", name);
 
