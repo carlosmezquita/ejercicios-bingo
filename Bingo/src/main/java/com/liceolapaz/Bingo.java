@@ -6,7 +6,7 @@ import java.util.Random;
 public class Bingo implements Runnable {
 
     private ArrayList<Integer> totalNumbers;
-    private ArrayList<Integer> numbers = new ArrayList<Integer>();
+    private ArrayList<Integer> gottenNumbers = new ArrayList<Integer>();
     private final int price = 2;
     private boolean bingo = false;
     private boolean line = false;
@@ -21,8 +21,10 @@ public class Bingo implements Runnable {
     @Override
     public void run() {
         while (!bingo) {
-            int number = totalNumbers.get(genNumber(totalNumbers.size() - 1));
-            numbers.add(number);
+            int number = genNumber(totalNumbers.size() - 1);
+            int ball = totalNumbers.get(number);
+            totalNumbers.remove(number);
+            gottenNumbers.add(ball);
         }
 
     }
