@@ -1,6 +1,7 @@
 package com.liceolapaz;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Player implements Runnable {
 
@@ -18,7 +19,8 @@ public class Player implements Runnable {
 
     private ArrayList<int[][]> getCard() {
         ArrayList<int[][]> cards = new ArrayList<>();
-        for (int i = 0; i < credit/2; i++) {
+        int cardsBought = new Random().nextInt(1, credit/2 + 1);
+        for (int i = 0; i < cardsBought; i++) {
             cards.add(new Card().getCardArray());
         }
         return cards;
@@ -26,6 +28,11 @@ public class Player implements Runnable {
 
     @Override
     public void run() {
+        while (!bingo.isBingo()){
+            if(bingo.play(cards)){
+
+            }
+        }
 
     }
 }
