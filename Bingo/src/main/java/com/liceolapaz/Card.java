@@ -7,6 +7,7 @@ public class Card {
     private static final int COLUMNS = 9;
     private static final int NUMS_PER_ROW = 5;
     private int[][] cardArray;
+    private List<Integer> values = new ArrayList<>();
 
     public Card() {
         this.cardArray = new int[ROWS][COLUMNS];
@@ -23,7 +24,6 @@ public class Card {
     * */
     private void generateCardValues(){
         List<Integer> rowsNums = new ArrayList<>();
-        List<Integer> values = new ArrayList<>();
         //Hacer una lista del tamaño de las columnas
         for (int j = 0; j < COLUMNS; j++) {
             rowsNums.add(j);
@@ -37,11 +37,7 @@ public class Card {
                 int randomIndex = rowsNums.get(j);
 
                 int randomValue = getRandomForColumn(randomIndex);
-                //Comprobar que el número aleatorio no sea repetido
-                while(values.contains(randomValue)){
-                    randomValue = getRandomForColumn(randomIndex);
-                }
-                values.add(randomValue);
+
                 cardArray[i][randomIndex] = randomValue;
             }
         }
@@ -72,20 +68,36 @@ public class Card {
                 fullColumns.add(i);
             }
         }
-        for (int i = 0; i < emptyColumns.size(); i++) {
-            int emptyColumn = emptyColumns.get(i);
-            int fullColumn = fullColumns.get(i);
-            int randomNum = getRandom(1, ROWS+1);
-            //Primero quitamos de la columna completa
-            cardArray[randomNum][fullColumn] = 0;
-            //Luego colocamos un número aleatorio en la columna vacía
-            cardArray[randomNum][emptyColumn] = getRandomForColumn(emptyColumn);
+        if (!emptyColumns.isEmpty() && fullColumns.size()==emptyColumns.size()) {
+            for (int i = 0; i < emptyColumns.size(); i++) {
+                int emptyColumn = emptyColumns.get(i);
+                int fullColumn = fullColumns.get(i);
+                int randomNum = getRandom(1, ROWS);
+                //Primero quitamos de la columna completa
+                cardArray[randomNum][fullColumn] = 0;
+                //Luego colocamos un número aleatorio en la columna vacía
+                cardArray[randomNum][emptyColumn] = getRandomForColumn(emptyColumn);
+            }
+        }else if(!emptyColumns.isEmpty()){
+            this.restartCardArray();
         }
+    }
+    private void restartCardArray(){
+        for (int[] ints : cardArray) {
+            Arrays.fill(ints, 0);
+        }
+        values.clear();
+        this.generateCardValues();
     }
     private int getRandomForColumn(int index){
         int min = index == 0 ? 1 : index*10;
         int max = index != 8 ? index*10 + 10 : index*10 + 20;
-        return getRandom(min, max);
+        int randomValue = getRandom(min, max);
+        while(values.contains(randomValue)){
+            randomValue = getRandom(min, max);
+        }
+        values.add(randomValue);
+        return randomValue;
     }
     private int getRandom(int min, int max){
         return (int) (Math.random() * (max - min) + min);
