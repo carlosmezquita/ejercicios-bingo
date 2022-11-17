@@ -35,18 +35,19 @@ public class Card {
             // Rellenar cada fila con 5 valores
             for (int j = 0; j < NUMS_PER_ROW; j++) {
                 int randomIndex = rowsNums.get(j);
-                int min = randomIndex == 0 ? 1 : randomIndex*10;
-                int max = randomIndex*10 + 10;
-                int randomValue = getRandom(max, min);
+
+                int randomValue = getRandomForColumn(randomIndex);
                 //Comprobar que el número aleatorio no sea repetido
                 while(values.contains(randomValue)){
-                    randomValue = getRandom(max,min);
+                    randomValue = getRandomForColumn(randomIndex);
                 }
                 values.add(randomValue);
                 cardArray[i][randomIndex] = randomValue;
             }
         }
         //Ordenar cada una de las columnas
+        List<Integer> emptyColumns = new ArrayList<>();
+        List<Integer> fullColumns = new ArrayList<>();
         for (int i = 0; i < COLUMNS; i++) {
             List<Integer> cellsRow = new ArrayList<>();
             for (int j = 0; j < ROWS; j++) {
@@ -62,9 +63,31 @@ public class Card {
                     k++;
                 }
             }
+            //Si hay alguna columna vacía almacenarla
+            if (k == 0){
+                emptyColumns.add(i);
+            }
+            //Si hay alguna columna llena
+            if (k == 3){
+                fullColumns.add(i);
+            }
+        }
+        for (int i = 0; i < emptyColumns.size(); i++) {
+            int emptyColumn = emptyColumns.get(i);
+            int fullColumn = fullColumns.get(i);
+            int randomNum = getRandom(1, ROWS+1);
+            //Primero quitamos de la columna completa
+            cardArray[randomNum][fullColumn] = 0;
+            //Luego colocamos un número aleatorio en la columna vacía
+            cardArray[randomNum][emptyColumn] = getRandomForColumn(emptyColumn);
         }
     }
-    private int getRandom(int max, int min){
+    private int getRandomForColumn(int index){
+        int min = index == 0 ? 1 : index*10;
+        int max = index != 8 ? index*10 + 10 : index*10 + 20;
+        return getRandom(min, max);
+    }
+    private int getRandom(int min, int max){
         return (int) (Math.random() * (max - min) + min);
     }
     public int[][] getCardArray() {
@@ -83,5 +106,11 @@ public class Card {
         }
         return "Card: " +
                 layout;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        //TODO: El método equals
+        return false;
     }
 }
