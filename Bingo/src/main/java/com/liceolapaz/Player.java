@@ -38,9 +38,9 @@ public class Player implements Runnable {
     @Override
     public void run() {
 
-        StringBuilder msg = new StringBuilder ("JUGADOR ").append( name.toUpperCase(Locale.ROOT)).append("\n");
+        StringBuilder msg = new StringBuilder ("JUGADOR ").append( name.toUpperCase(Locale.ROOT)).append("\n\n");
         for (Card card : cards) {
-            msg.append(card.toString());
+            msg.append(card.toString()).append("\n");
         }
         System.out.println(msg);
         Log.printLog(msg.toString());

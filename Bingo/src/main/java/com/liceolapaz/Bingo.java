@@ -1,5 +1,6 @@
 package com.liceolapaz;
 
+import java.text.Format;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
@@ -42,6 +43,14 @@ public class Bingo implements Runnable {
     @Override
     public void run() {
 
+        //Para que los jugadores se impriman con tiempo
+        try {
+            sleep(200);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        //Log
         String msg = separator;
         msg += "EMPEZANDO BINGO\n";
         msg += separator;
@@ -137,12 +146,17 @@ public class Bingo implements Runnable {
     //Cada cartón ejecuta este método para comprobar el bingo
     private void checkNumber(Card card, String name) {
 
+        if (card.getCrossed().contains(actualBall)){
+            return;
+        }
+
         int[][] cardArray = card.getCardArray();
 
         //Se ejecuta por cada línea
         for (int[] row : cardArray) {
 
             //Comprueba si alguno de los números coincide con la bola que acaba de salir
+
             if (Arrays.stream(row).anyMatch(n -> n == actualBall)){
 
             //Aumenta las coincidencias si coincide
@@ -181,23 +195,31 @@ public class Bingo implements Runnable {
 
         if (!bingo) {
             bingo = true;
-            msg = new StringBuilder("El ganador del bingo ha sido" + name);
-            msg.append("\nPremio ganado: ").append(prize).append("€\n");
+            msg = new StringBuilder("El ganador del bingo ha sido " + name);
+            msg.append("\nPremio ganado: ").append(prize).append("€\n\n");
             msg.append(separator);
             msg.append("CARTÓN GANADOR\n");
-            msg.append(separator);
-            msg.append(card.toString()).append("\n");
+            msg.append(separator).append("\n");
+            msg.append(card.toString()).append("\n\n");
             msg.append(separator);
             msg.append("NÚMEROS SALIDOS\n");
+            msg.append(separator);
             System.out.println(msg);
             Log.printLog(msg.toString());
 
             msg = new StringBuilder("|| ");
-            for (int numero : gottenNumbers) {
-                msg.append(numero).append(" || ");
+            int i = 0;
 
+            for (int numero : gottenNumbers) {
+
+                if (i == 15) {
+                    msg.append("\n|| ");
+                    i = 0;
+                }
+                msg.append(String.format("%02d", numero)).append(" || ");
+                i++;
             }
-            msg.append("\n").append(separator);
+            msg.append("\n\n").append(separator);
             msg.append("FIN DE BINGO\n");
             msg.append(separator);
             System.out.println(msg);

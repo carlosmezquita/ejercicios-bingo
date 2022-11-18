@@ -124,11 +124,11 @@ public class Card {
         for (int[] ints : cardArray) {
             StringBuilder row = new StringBuilder();
             for (int anInt : ints) {
-                row.append(" [").append(anInt).append("]");
+                row.append(" [").append(String.format("%02d", anInt)).append("]");
             }
             layout.append("\n").append(row);
         }
-        return "Card: " +
+        return " Card: " +
                 layout;
     }
 
