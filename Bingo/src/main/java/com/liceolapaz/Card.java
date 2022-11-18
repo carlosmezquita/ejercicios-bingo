@@ -9,6 +9,10 @@ public class Card {
     private int[][] cardArray;
     private List<Integer> values = new ArrayList<>();
 
+    private int coincidences = 0;
+
+
+
     public Card() {
         this.cardArray = new int[ROWS][COLUMNS];
         generateCardValues();
@@ -104,6 +108,14 @@ public class Card {
     }
     public int[][] getCardArray() {
         return cardArray;
+    }
+
+    public int getCoincidences() {
+        return coincidences;
+    }
+
+    public void setCoincidences(int coincidences) {
+        this.coincidences = coincidences;
     }
 
     @Override
