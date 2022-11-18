@@ -3,17 +3,18 @@ package com.liceolapaz;
 import java.util.*;
 
 public class Card {
+
     private static final int ROWS = 3;
     private static final int COLUMNS = 9;
     private static final int NUMS_PER_ROW = 5;
-    private int[][] cardArray;
-    private List<Integer> values = new ArrayList<>();
+    private final int id;
+    private final int[][] cardArray;
+    private final List<Integer> values = new ArrayList<>();
 
-    private ArrayList<Integer> crossed = new ArrayList<>();
+    private final ArrayList<Integer> crossed = new ArrayList<>();
 
-
-
-    public Card() {
+    public Card(int id) {
+        this.id = id;
         this.cardArray = new int[ROWS][COLUMNS];
         generateCardValues();
     }
@@ -103,11 +104,17 @@ public class Card {
         values.add(randomValue);
         return randomValue;
     }
+
     private int getRandom(int min, int max){
         return (int) (Math.random() * (max - min) + min);
     }
+
     public int[][] getCardArray() {
         return cardArray;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public void addCoincidence(int number) {

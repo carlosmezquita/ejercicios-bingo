@@ -30,7 +30,7 @@ public class Player implements Runnable {
         //Compra los cartones
         for (int i = 0; i < cardsBought; i++) {
             credit -= bingo.getPrice();
-            cards.add(new Card());
+            cards.add(new Card(i + 1));
         }
         return cards;
     }

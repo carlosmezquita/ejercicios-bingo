@@ -1,6 +1,5 @@
 package com.liceolapaz;
 
-import java.text.Format;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
@@ -40,15 +39,9 @@ public class Bingo implements Runnable {
         return price;
     }
 
+    //TODO: Modulariza un poco el run, solo extrae métodos, si quieres cambiar algo avísame
     @Override
     public void run() {
-
-        //Para que los jugadores se impriman con tiempo
-        try {
-            sleep(200);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
 
         //Log
         String msg = separator;
@@ -56,6 +49,16 @@ public class Bingo implements Runnable {
         msg += separator;
         System.out.println(msg);
         Log.printLog(msg);
+
+
+        /*TODO: Si el sleep es muy alto los jugadores no juegan al bingo
+        *  No se porque, asi juegan pero al imprimirse por pantalla no se ve bien*/
+        //Para que los jugadores se impriman con tiempo
+        try {
+            sleep(20);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
         //Se ejecuta hasta que alguien canta bingo
         while (!bingo) {
@@ -162,7 +165,8 @@ public class Bingo implements Runnable {
             //Aumenta las coincidencias si coincide
              card.addCoincidence(actualBall);
 
-            final String msg = name + " tacha el " + actualBall + ", " + card.getCrossed().size() + " tachadas en el cartón";
+            final String msg = name + " tacha el " + actualBall
+                    + ", " + card.getCrossed().size() + " tachadas en el cartón nº" + card.getId();
             System.out.println(msg);
             Log.printLog(msg);
             return;
