@@ -1,11 +1,12 @@
 package com.liceolapaz;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Random;
 
 public class Player implements Runnable {
 
-    private ArrayList<Card> cards;
+    private final ArrayList<Card> cards;
     private int credit;
     private final String name;
     private final Bingo bingo;
@@ -36,23 +37,35 @@ public class Player implements Runnable {
 
     @Override
     public void run() {
+
+        StringBuilder msg = new StringBuilder ("JUGADOR ").append( name.toUpperCase(Locale.ROOT)).append("\n");
+        for (Card card : cards) {
+            msg.append(card.toString());
+        }
+        System.out.println(msg);
+        Log.printLog(msg.toString());
+
+
         //Juega hasta que alguien canta bingo
         while (!bingo.isBingo()){
 
-            //Si tiene 25 tachados es bingo
+            //Comprueba cada tarjeta
             for (Card card : cards) {
-                if (card.getCoincidences() == 25) {
 
-                    //Canta bingo aunque no gane
-                    bingo.madeBingo(name, card);
+                //Si tiene 25 tachados es bingo
+
+                try {
+                    if (card.getCrossed().size() == 15) {
+
+                        //Canta bingo aunque no gane
+                        bingo.madeBingo(name, card);
+                    }
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
                 }
 
+
                 bingo.play(card, name);
-            }
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
             }
 
         }

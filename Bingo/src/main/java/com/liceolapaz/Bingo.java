@@ -16,7 +16,9 @@ public class Bingo implements Runnable {
     private boolean line = false;
     private int actualBall = -1;
     private boolean bola = false;
+    private int nBola = 1;
     private final int prize;
+    private final String separator = "============================================\n";
 
     public Bingo(int price) {
         //Añade los 99 números del bingo a un ArrayList
@@ -39,14 +41,30 @@ public class Bingo implements Runnable {
 
     @Override
     public void run() {
+
+        String msg = separator;
+        msg += "EMPEZANDO BINGO\n";
+        msg += separator;
+        System.out.println(msg);
+        Log.printLog(msg);
+
         //Se ejecuta hasta que alguien canta bingo
         while (!bingo) {
+
+            if (totalNumbers.isEmpty()) {
+                System.exit(2);
+            }
 
             //Genera un número entre 1 y el total de números restantes para devolver esa posición sin repetir números
             int number = genNumber(0, totalNumbers.size() - 1);
             actualBall = totalNumbers.get(number);
             bola = true;
-            System.out.printf("BOLA: %d\n", actualBall);
+
+            msg = nBola + ". BOLA: " + actualBall;
+            System.out.println(msg);
+            Log.printLog(msg);
+            nBola++;
+
             totalNumbers.remove(number);
 
             //Retira ese número del ArrayList
@@ -81,7 +99,7 @@ public class Bingo implements Runnable {
                 madeLine(name);
             }
         }
-        checkBingo(card, name);
+        checkNumber(card, name);
     }
 
 
@@ -117,7 +135,7 @@ public class Bingo implements Runnable {
     }
 
     //Cada cartón ejecuta este método para comprobar el bingo
-    private void checkBingo(Card card, String name) {
+    private void checkNumber(Card card, String name) {
 
         int[][] cardArray = card.getCardArray();
 
@@ -127,42 +145,65 @@ public class Bingo implements Runnable {
             //Comprueba si alguno de los números coincide con la bola que acaba de salir
             if (Arrays.stream(row).anyMatch(n -> n == actualBall)){
 
-                System.out.printf("%s tacha el %d\n", name, actualBall);
-
             //Aumenta las coincidencias si coincide
-             card.setCoincidences(card.getCoincidences() + 1);
-             return;
+             card.addCoincidence(actualBall);
+
+            final String msg = name + " tacha el " + actualBall + ", " + card.getCrossed().size() + " tachadas en el cartón";
+            System.out.println(msg);
+            Log.printLog(msg);
+            return;
             }
         }
     }
 
     //Declara el ganador de la líena
     private synchronized void madeLine(String name) {
-        System.out.printf("[%s]: ¡LÍNEA!\n", name);
+
+        String msg = "[" + name + "]: ¡LÍNEA!";
+        System.out.println(msg);
+        Log.printLog(msg);
+
         if (!line) {
             line = true;
-            System.out.printf("%s se ha llevado la línea\n", name);
+            msg = name + " se ha llevado la línea";
+            System.out.println(msg);
+            Log.printLog(msg);
+
         }
     }
 
     //Declara el ganador del bingo
     public synchronized void madeBingo(String name, Card card){
 
-        System.out.printf("[%s]: ¡BINGO!\n", name);
+        StringBuilder msg = new StringBuilder("[" + name + "]: ¡BINGO!");
+        System.out.println(msg);
+        Log.printLog(msg.toString());
+
         if (!bingo) {
             bingo = true;
-            System.out.printf("El ganador del bingo ha sigo %s\n", name);
-            System.out.printf("Premio ganado: %d€\n", prize);
-            System.out.println("======================");
-            System.out.println("CARTÓN GANADOR");
-            System.out.println("======================");
-            System.out.println(card.toString());
-            System.out.println("======================");
-            System.out.println("NÚMEROS SALIDOS");
+            msg = new StringBuilder("El ganador del bingo ha sido" + name);
+            msg.append("\nPremio ganado: ").append(prize).append("€\n");
+            msg.append(separator);
+            msg.append("CARTÓN GANADOR\n");
+            msg.append(separator);
+            msg.append(card.toString()).append("\n");
+            msg.append(separator);
+            msg.append("NÚMEROS SALIDOS\n");
+            System.out.println(msg);
+            Log.printLog(msg.toString());
+
+            msg = new StringBuilder("|| ");
             for (int numero : gottenNumbers) {
-                System.out.print(numero + " || ");
+                msg.append(numero).append(" || ");
+
             }
-            System.out.println();
+            msg.append("\n").append(separator);
+            msg.append("FIN DE BINGO\n");
+            msg.append(separator);
+            System.out.println(msg);
+            Log.printLog(msg.toString());
+            System.exit(0);
+
         }
     }
 

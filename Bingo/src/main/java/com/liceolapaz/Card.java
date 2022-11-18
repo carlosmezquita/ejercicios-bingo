@@ -9,7 +9,7 @@ public class Card {
     private int[][] cardArray;
     private List<Integer> values = new ArrayList<>();
 
-    private int coincidences = 0;
+    private ArrayList<Integer> crossed = new ArrayList<>();
 
 
 
@@ -110,12 +110,12 @@ public class Card {
         return cardArray;
     }
 
-    public int getCoincidences() {
-        return coincidences;
+    public void addCoincidence(int number) {
+        crossed.add(number);
     }
 
-    public void setCoincidences(int coincidences) {
-        this.coincidences = coincidences;
+    public ArrayList<Integer> getCrossed() {
+        return crossed;
     }
 
     @Override
