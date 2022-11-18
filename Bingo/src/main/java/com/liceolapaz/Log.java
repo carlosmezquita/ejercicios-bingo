@@ -21,7 +21,7 @@ public class Log {
         }
     }
     private static String getTimestamp(){
-        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss:SS");
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss");
         return "[" + df.format(new Date()) + "]: ";
     }
 }
