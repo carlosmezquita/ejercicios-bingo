@@ -9,8 +9,7 @@ import static java.lang.Thread.sleep;
 public class Bingo implements Runnable {
 
     private final ArrayList<Integer> totalNumbers;
-    private final ArrayList<Integer> gottenNumbers ;
-
+    private final ArrayList<Integer> gottenNumbers = new ArrayList<>() ;
     private final int price;
     private boolean bingo = false;
     private boolean line = false;
@@ -26,7 +25,6 @@ public class Bingo implements Runnable {
         for (int i = 1; i < 100; i++) {
             totalNumbers.add(i);
         }
-        this.gottenNumbers = new ArrayList<>();
         this.price = price;
         this.prize = genNumber(50, 100);
     }
