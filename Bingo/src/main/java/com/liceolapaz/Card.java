@@ -123,6 +123,6 @@ public class Card {
     @Override
     public boolean equals(Object object) {
         //TODO: El método equals
-        return false;
+        return super.equals(object);
     }
 }
