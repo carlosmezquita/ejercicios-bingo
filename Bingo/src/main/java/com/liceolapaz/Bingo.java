@@ -9,7 +9,7 @@ import static java.lang.Thread.sleep;
 public class Bingo implements Runnable {
 
     private final ArrayList<Integer> totalNumbers;
-    private final ArrayList<Integer> gottenNumbers = new ArrayList<>() ;
+    private final ArrayList<Integer> gottenNumbers = new ArrayList<>();
     private final int price;
     private boolean bingo = false;
     private boolean line = false;
@@ -50,13 +50,13 @@ public class Bingo implements Runnable {
 
 
         /*TODO: Si el sleep es muy alto los jugadores no juegan al bingo
-        *  No se porque, asi juegan pero al imprimirse por pantalla no se ve bien*/
+         *  No se porque, asi juegan pero al imprimirse por pantalla no se ve bien*/
         //Para que los jugadores se impriman con tiempo
-        try {
-            sleep(20);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+//        try {
+//            sleep(20);
+//        } catch (InterruptedException e) {
+//            throw new RuntimeException(e);
+//        }
 
         //Se ejecuta hasta que alguien canta bingo
         while (!bingo) {
@@ -68,11 +68,12 @@ public class Bingo implements Runnable {
             //Genera un número entre 1 y el total de números restantes para devolver esa posición sin repetir números
             int number = genNumber(0, totalNumbers.size() - 1);
             actualBall = totalNumbers.get(number);
-            bola = true;
 
             msg = nBola + ". BOLA: " + actualBall;
             System.out.println(msg);
             Log.printLog(msg);
+
+            bola = true;
             nBola++;
 
             totalNumbers.remove(number);
@@ -92,7 +93,7 @@ public class Bingo implements Runnable {
     }
 
     //Método por el que los jugadores comprueban sus cartones
-    public void play(Card card, String name){
+    public void play(Card card, String name) {
 
         //Si no hay una bola nueva no ejecuta nada
         if (!bola) {
@@ -100,10 +101,10 @@ public class Bingo implements Runnable {
         }
 
         //Solo se ejecuta si aún no se ha cantado línea
-        if (!line){
+        if (!line) {
 
             //Si alguien canta línea se ejecuta
-            if (checkLine(card)){
+            if (checkLine(card)) {
 
                 //Bloque sincronizado para que aunque varios canten solo gane el más rápido
                 madeLine(name);
@@ -111,7 +112,6 @@ public class Bingo implements Runnable {
         }
         checkNumber(card, name);
     }
-
 
 
     //Divide los cartones en líneas para comprobar si tiene línea
@@ -122,16 +122,16 @@ public class Bingo implements Runnable {
         int[][] cardArray = card.getCardArray();
 
         //Itera por cada línea
-        for (int[] row : cardArray) {
+        for (int i = 0; i < Card.ROWS; i++) {
 
             //Reinicia las coincidencias
             coincidences = 0;
 
             //Itera por cada número
-            for (int number : row) {
+            for (int j = 0; j < Card.COLUMNS; j++) {
 
                 //Si un número coincide sube las coincidencias
-                if (gottenNumbers.contains(number)) {
+                if (gottenNumbers.contains(cardArray[i][j])) {
                     coincidences++;
                 }
             }
@@ -147,7 +147,7 @@ public class Bingo implements Runnable {
     //Cada cartón ejecuta este método para comprobar el bingo
     private void checkNumber(Card card, String name) {
 
-        if (card.getCrossed().contains(actualBall)){
+        if (card.getCrossed().contains(actualBall)) {
             return;
         }
 
@@ -158,16 +158,16 @@ public class Bingo implements Runnable {
 
             //Comprueba si alguno de los números coincide con la bola que acaba de salir
 
-            if (Arrays.stream(row).anyMatch(n -> n == actualBall)){
+            if (Arrays.stream(row).anyMatch(n -> n == actualBall)) {
 
-            //Aumenta las coincidencias si coincide
-             card.addCoincidence(actualBall);
+                //Aumenta las coincidencias si coincide
+                card.addCoincidence(actualBall);
 
-            final String msg = name + " tacha el " + actualBall
-                    + ", " + card.getCrossed().size() + " tachadas en el cartón nº" + card.getId();
-            System.out.println(msg);
-            Log.printLog(msg);
-            return;
+                final String msg = name + " tacha el " + actualBall
+                        + ", " + card.getCrossed().size() + " tachadas en el cartón nº" + card.getId();
+                System.out.println(msg);
+                Log.printLog(msg);
+                return;
             }
         }
     }
@@ -189,7 +189,7 @@ public class Bingo implements Runnable {
     }
 
     //Declara el ganador del bingo
-    public synchronized void madeBingo(String name, Card card){
+    public synchronized void madeBingo(String name, Card card) {
 
         StringBuilder msg = new StringBuilder("[" + name + "]: ¡BINGO!");
         System.out.println(msg);
@@ -232,7 +232,7 @@ public class Bingo implements Runnable {
     }
 
     //Generador de número aleatorio
-    private int genNumber(int min, int max){
+    private int genNumber(int min, int max) {
         return new Random().nextInt(min, max + 1);
     }
 }

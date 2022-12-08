@@ -1,11 +1,14 @@
 package com.liceolapaz;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class Card {
 
-    private static final int ROWS = 3;
-    private static final int COLUMNS = 9;
+    static final int ROWS = 3;
+    static final int COLUMNS = 9;
     private static final int NUMS_PER_ROW = 5;
     private final int id;
     private final int[][] cardArray;
@@ -20,14 +23,14 @@ public class Card {
     }
 
     /*              Método generación valores del cartón del Bingo
-    *
-    *   El programa genera una lista con las columnas que tiene cada fila y después
-    *   los mezcla. Los 5 primeros valores son los correspondientes a los índices de
-    *   las columnas que serán ocupadas. Luego genera un valor correspondiente a la
-    *   decena de la columna en la que se encuentra y por último ordena la respectiva columna.
-    *
-    * */
-    private void generateCardValues(){
+     *
+     *   El programa genera una lista con las columnas que tiene cada fila y después
+     *   los mezcla. Los 5 primeros valores son los correspondientes a los índices de
+     *   las columnas que serán ocupadas. Luego genera un valor correspondiente a la
+     *   decena de la columna en la que se encuentra y por último ordena la respectiva columna.
+     *
+     * */
+    private void generateCardValues() {
         List<Integer> rowsNums = new ArrayList<>();
         //Hacer una lista del tamaño de las columnas
         for (int j = 0; j < COLUMNS; j++) {
@@ -52,28 +55,28 @@ public class Card {
         for (int i = 0; i < COLUMNS; i++) {
             List<Integer> cellsRow = new ArrayList<>();
             for (int j = 0; j < ROWS; j++) {
-                if (cardArray[j][i] != 0){
+                if (cardArray[j][i] != 0) {
                     cellsRow.add(cardArray[j][i]);
                 }
             }
             Collections.sort(cellsRow);
-            int k=0;
+            int k = 0;
             for (int j = 0; j < ROWS; j++) {
-                if (cardArray[j][i] != 0){
+                if (cardArray[j][i] != 0) {
                     cardArray[j][i] = cellsRow.get(k);
                     k++;
                 }
             }
             //Si hay alguna columna vacía almacenarla
-            if (k == 0){
+            if (k == 0) {
                 emptyColumns.add(i);
             }
             //Si hay alguna columna llena
-            if (k == 3){
+            if (k == 3) {
                 fullColumns.add(i);
             }
         }
-        if (!emptyColumns.isEmpty() && fullColumns.size()==emptyColumns.size()) {
+        if (!emptyColumns.isEmpty() && fullColumns.size() == emptyColumns.size()) {
             for (int i = 0; i < emptyColumns.size(); i++) {
                 int emptyColumn = emptyColumns.get(i);
                 int fullColumn = fullColumns.get(i);
@@ -83,29 +86,31 @@ public class Card {
                 //Luego colocamos un número aleatorio en la columna vacía
                 cardArray[randomNum][emptyColumn] = getRandomForColumn(emptyColumn);
             }
-        }else if(!emptyColumns.isEmpty()){
+        } else if (!emptyColumns.isEmpty()) {
             this.restartCardArray();
         }
     }
-    private void restartCardArray(){
+
+    private void restartCardArray() {
         for (int[] ints : cardArray) {
             Arrays.fill(ints, 0);
         }
         values.clear();
         this.generateCardValues();
     }
-    private int getRandomForColumn(int index){
-        int min = index == 0 ? 1 : index*10;
-        int max = index != 8 ? index*10 + 10 : index*10 + 20;
+
+    private int getRandomForColumn(int index) {
+        int min = index == 0 ? 1 : index * 10;
+        int max = index != 8 ? index * 10 + 10 : index * 10 + 20;
         int randomValue = getRandom(min, max);
-        while(values.contains(randomValue)){
+        while (values.contains(randomValue)) {
             randomValue = getRandom(min, max);
         }
         values.add(randomValue);
         return randomValue;
     }
 
-    private int getRandom(int min, int max){
+    private int getRandom(int min, int max) {
         return (int) (Math.random() * (max - min) + min);
     }
 

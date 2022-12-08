@@ -25,7 +25,7 @@ public class Player implements Runnable {
         ArrayList<Card> cards = new ArrayList<>();
 
         //Elige cuantos cartones compra en base el precio
-        int cardsBought = new Random().nextInt(1, credit/bingo.getPrice() + 1);
+        int cardsBought = new Random().nextInt(1, credit / bingo.getPrice() + 1);
 
         //Compra los cartones
         for (int i = 0; i < cardsBought; i++) {
@@ -38,7 +38,7 @@ public class Player implements Runnable {
     @Override
     public void run() {
 
-        StringBuilder msg = new StringBuilder ("JUGADOR ").append( name.toUpperCase(Locale.ROOT)).append("\n\n");
+        StringBuilder msg = new StringBuilder("JUGADOR ").append(name.toUpperCase(Locale.ROOT)).append("\n\n");
         for (Card card : cards) {
             msg.append(card.toString()).append("\n");
         }
@@ -47,7 +47,7 @@ public class Player implements Runnable {
 
 
         //Juega hasta que alguien canta bingo
-        while (!bingo.isBingo()){
+        while (!bingo.isBingo()) {
 
             //Comprueba cada tarjeta
             for (Card card : cards) {
